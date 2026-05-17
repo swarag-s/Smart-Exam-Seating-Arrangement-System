@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Smart Exam Seating</title>
+  <meta name="description"
+    content="Admin panel for Smart Exam Seating — upload students, configure exam halls and generate PDF." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css?v=5" />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════
+         LOGIN VIEW
+    ══════════════════════════════════════════ -->
+  <div id="loginView" class="login-page">
+    <div class="login-card">
+
+      <div class="card-brand">
+        <div class="card-brand-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+        </div>
+        <div class="card-brand-text">
+          <strong>Exam Cell</strong>
+          <small>Smart Seating System</small>
+        </div>
+      </div>
+
+      <p class="card-title">Admin Login</p>
+      <p class="muted">Only exam cell admins can access this page</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" type="text" placeholder="admin" required autocomplete="username" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn-block" id="loginBtn">Sign In</button>
+        <p id="loginMessage" class="error-text" style="margin-top: 8px;"></p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+         APP SHELL (shown after login)
+    ══════════════════════════════════════════ -->
+  <div id="appView" class="app-shell hidden">
+
+    <!-- ── Sidebar ── -->
+    <aside class="left-panel">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-name">Exam Cell</div>
+        <div class="sidebar-brand-sub">Smart Seating System</div>
+      </div>
+
+      <div class="sidebar-section">Admin Menu</div>
+
+      <nav>
+        <button class="nav-btn active" data-step="upload" id="nav-upload">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 16 12 12 8 16" />
+            <line x1="12" y1="12" x2="12" y2="21" />
+            <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+          </svg>
+          Upload Excel
+        </button>
+        <button class="nav-btn" data-step="exam" id="nav-exam">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Create Exam
+        </button>
+        <button class="nav-btn" data-step="preview" id="nav-preview">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Preview
+        </button>
+        <button class="nav-btn" data-step="pdf" id="nav-pdf">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="12" y1="18" x2="12" y2="12" />
+            <line x1="9" y1="15" x2="15" y2="15" />
+          </svg>
+          PDF
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn">
+          <svg style="width:15px;height:15px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Log Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content">
+
+      <!-- Topbar -->
+      <header class="main-header">
+        <h2>Proforma 1 — Seating Arrangement</h2>
+        <span class="header-badge">Admin Panel</span>
+      </header>
+
+      <!-- ─── STEP 1: Upload ─── -->
+      <section id="step-upload" class="step-card active-step">
+        <div class="page-heading">
+          <h3>Upload Student Master Excel</h3>
+          <p>Required columns: <strong>Registration Number</strong>, <strong>Department</strong>. &nbsp;Optional:
+            <strong>Class</strong>, <strong>Name</strong>.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Student File</div>
+          <div class="upload-row">
+            <input id="excelFile" type="file" accept=".xlsx,.xls" />
+            <button id="uploadBtn" type="button" class="btn-green">Upload</button>
+          </div>
+          <div class="toolbar-row">
+            <p id="uploadMessage" class="info-text"></p>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <p id="clearMessage" class="info-text" style="margin:0;"></p>
+              <button id="clearArrBtn" type="button" class="btn-danger" style="padding:6px 14px;font-size:12.5px;">Clear
+                Data</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="uploadStats" class="stat-grid hidden"></div>
+
+        <div class="table-wrap" style="margin-top:0;">
+          <table id="studentTable" class="hidden">
+            <thead>
+              <tr>
+                <th>Reg No</th>
+                <th>Department</th>
+                <th>Class</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ─── STEP 2: Exam & Hall ─── -->
+      <section id="step-exam" class="step-card">
+        <div class="page-heading">
+          <h3>Create Exam and Hall Details</h3>
+          <p>Configure exam parameters and hall layout before generating the seating arrangement.</p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Exam Details</div>
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="examName">Exam Name</label>
+              <input id="examName" placeholder="e.g. End Semester Exam" />
+            </div>
+            <div class="field-group">
+              <label for="examDate">Exam Date</label>
+              <input id="examDate" type="date" />
+            </div>
+            <div class="field-group">
+              <label for="session">Session</label>
+              <input id="session" placeholder="Morning / Evening" />
+            </div>
+            <div class="field-group">
+              <label for="subject">Subject (optional)</label>
+              <input id="subject" placeholder="e.g. Mathematics" />
+            </div>
+            <div class="field-group">
+              <label for="departmentSelect">Department</label>
+              <select id="departmentSelect">
+                <option value="ALL">All Departments</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="classSelect">Class</label>
+              <select id="classSelect">
+                <option value="ALL">All Classes</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="semester">Semester (optional)</label>
+              <input id="semester" placeholder="e.g. 4" />
+            </div>
+            <div class="field-group">
+              <label for="collegeName">College Name</label>
+              <input id="collegeName" placeholder="e.g. ABC Engineering College" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Hall Configuration</div>
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="hallName">Hall Name / Room No</label>
+              <input id="hallName" placeholder="e.g. Seminar Hall A" />
+            </div>
+            <div class="field-group">
+              <label for="studentsPerBench">Students Per Bench</label>
+              <input id="studentsPerBench" type="number" min="1" max="2" value="1" />
+            </div>
+            <div class="field-group">
+              <label for="leftBenches">Left Side Benches</label>
+              <input id="leftBenches" type="number" min="1" placeholder="e.g. 10" />
+            </div>
+            <div class="field-group">
+              <label for="rightBenches">Right Side Benches</label>
+              <input id="rightBenches" type="number" min="1" placeholder="e.g. 10" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="previewBtn" type="button" class="btn-primary">Generate Seating Preview</button>
+          <p id="previewMessage" class="error-text"></p>
+        </div>
+      </section>
+
+      <!-- ─── STEP 3: Preview ─── -->
+      <section id="step-preview" class="step-card">
+        <div class="page-heading">
+          <h3>Seating Preview</h3>
+          <p>Review the generated arrangement before downloading the PDF.</p>
+        </div>
+
+        <div class="panel">
+          <div class="preview-bar">
+            <button id="shuffleBtn" type="button" class="btn-outline">↺ &nbsp;Shuffle Again</button>
+            <button id="pdfBtn" type="button" class="btn-primary">Generate PDF →</button>
+            <p id="pdfMessage" class="info-text" style="margin:0;"></p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px;">
+            <div class="preview-col-header">LEFT SIDE</div>
+            <div class="preview-col-header">RIGHT SIDE</div>
+          </div>
+          <div id="previewRows"></div>
+        </div>
+      </section>
+
+      <!-- ─── STEP 4: PDF ─── -->
+      <section id="step-pdf" class="step-card">
+        <div class="page-heading">
+          <h3>PDF Download</h3>
+          <p>Your seating arrangement PDF is ready for download.</p>
+        </div>
+
+        <div class="panel">
+          <a id="pdfLink" class="hidden" target="_blank">↓ &nbsp;Download Seating Arrangement PDF</a>
+          <p id="finalMessage" class="info-text" style="margin-top:10px;"></p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="./api-config.js"></script>
+  <script src="./admin.js"></script>
+</body>
+
+</html>

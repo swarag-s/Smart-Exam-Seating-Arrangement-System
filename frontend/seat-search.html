@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find My Exam Seat</title>
+    <meta name="description" content="Search your exam seat by registration number." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css?v=5" />
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="login-card">
+
+        <!-- Brand -->
+        <div class="card-brand">
+          <div class="card-brand-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <div class="card-brand-text">
+            <strong>Find My Seat</strong>
+            <small>Exam Cell — Smart Seating</small>
+          </div>
+        </div>
+
+        <p class="muted">Enter your registration number to check your exam bench.</p>
+
+        <div class="field">
+          <label for="searchRegNo">Registration Number</label>
+          <input id="searchRegNo" type="text" placeholder="e.g. CET24CS001" />
+        </div>
+
+        <button id="searchBtn" type="button" class="btn-block">Search Seat</button>
+
+        <p id="searchMessage" class="error-text" style="margin-top: 8px;"></p>
+
+        <div id="resultCard" class="hidden seat-result"></div>
+
+        <p style="margin-top: 20px; text-align: center; font-size: 12.5px; color: var(--text-3);">
+          <a href="admin.html" style="color: var(--accent); text-decoration: none; font-weight: 600;">Admin Login →</a>
+        </p>
+
+      </div>
+    </div>
+
+    <script src="./api-config.js"></script>
+    <script src="./seat-search.js"></script>
+  </body>
+</html>
